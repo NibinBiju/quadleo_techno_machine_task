@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quadleo_techno_machine_task/core/widgets/app_textfield.dart';
 import 'package:quadleo_techno_machine_task/core/widgets/custom_button.dart';
 import 'package:quadleo_techno_machine_task/core/widgets/custom_text.dart';
-import 'package:quadleo_techno_machine_task/presentation/create_account_page.dart/pages/create_account_page.dart';
+import 'package:quadleo_techno_machine_task/data/repository_impl/auth_repository_impl.dart';
+import 'package:quadleo_techno_machine_task/data/source/auth_source.dart';
+import 'package:quadleo_techno_machine_task/presentation/auth/auth_connect.dart';
+import 'package:quadleo_techno_machine_task/presentation/auth/bloc/auth_bloc.dart';
+import 'package:quadleo_techno_machine_task/presentation/auth/create_account_page/pages/create_account_page.dart';
 import 'package:quadleo_techno_machine_task/presentation/home_page/pages/home_page.dart';
 
 class LoginPage extends StatelessWidget {
@@ -58,9 +63,16 @@ class LoginPage extends StatelessWidget {
             //create aacount
             TextButton(
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => CreateAccountPage()),
-                );
+                // Navigator.of(context).push(
+                //   MaterialPageRoute(
+                //     builder: (context) => BlocProvider(
+                //       create: (context) =>
+                //           AuthBloc(AuthRepositoryImpl(AuthSourceImpl())),
+                //       child: CreateAccountPage(),
+                //     ),
+                //   ),
+                // );
+                 AuthConnect(authTo: false);
               },
               child: CustomTextWidget(text: 'Create Account', fontSize: 17),
             ),

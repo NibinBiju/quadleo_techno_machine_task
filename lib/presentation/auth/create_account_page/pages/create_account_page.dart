@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quadleo_techno_machine_task/core/widgets/app_textfield.dart';
 import 'package:quadleo_techno_machine_task/core/widgets/custom_button.dart';
 import 'package:quadleo_techno_machine_task/core/widgets/custom_text.dart';
+import 'package:quadleo_techno_machine_task/data/model/user_model.dart';
+import 'package:quadleo_techno_machine_task/presentation/auth/auth_connect.dart';
+import 'package:quadleo_techno_machine_task/presentation/auth/bloc/auth_bloc.dart';
 
 class CreateAccountPage extends StatelessWidget {
   CreateAccountPage({super.key});
@@ -41,15 +45,41 @@ class CreateAccountPage extends StatelessWidget {
             ),
             SizedBox(height: 40),
             //login button
-            CustomButton(
-              text: 'Create',
+            BlocConsumer<AuthBloc, AuthState>(
+              listener: (context, state) {
+                if (state is AuthSuccess) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(state.message)));
+                }
+                if (state is AuthFailed) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(state.message)));
+                }
+              },
+              builder: (context, state) {
+                return CustomButton(
+                  text: 'Create',
+                  onTap: () {
+                    context.read<AuthBloc>().add(
+                      UserCreateEvent(
+                        userModel: UserModel(
+                          userName: _usernameController.text.trim(),
+                          password: _passwordController.text.trim(),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
             ),
             SizedBox(height: 10),
 
             //create aacount
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
+                AuthConnect(authTo: true);
               },
               child: CustomTextWidget(text: 'User Login', fontSize: 17),
             ),
