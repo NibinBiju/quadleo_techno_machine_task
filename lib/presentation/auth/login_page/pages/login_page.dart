@@ -3,17 +3,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quadleo_techno_machine_task/core/widgets/app_textfield.dart';
 import 'package:quadleo_techno_machine_task/core/widgets/custom_button.dart';
 import 'package:quadleo_techno_machine_task/core/widgets/custom_text.dart';
-import 'package:quadleo_techno_machine_task/data/repository_impl/auth_repository_impl.dart';
-import 'package:quadleo_techno_machine_task/data/source/auth_source.dart';
+import 'package:quadleo_techno_machine_task/data/model/user_model.dart';
 import 'package:quadleo_techno_machine_task/presentation/auth/auth_connect.dart';
 import 'package:quadleo_techno_machine_task/presentation/auth/bloc/auth_bloc.dart';
-import 'package:quadleo_techno_machine_task/presentation/auth/create_account_page/pages/create_account_page.dart';
 import 'package:quadleo_techno_machine_task/presentation/home_page/pages/home_page.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
+
   final TextEditingController _passwordController = TextEditingController();
 
   @override
@@ -48,11 +52,36 @@ class LoginPage extends StatelessWidget {
             ),
             SizedBox(height: 40),
             //login button
-            CustomButton(
-              text: 'Login',
-              onTap: () {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => HomePage()),
+            BlocConsumer<AuthBloc, AuthState>(
+              listener: (context, state) {
+                if (state is AuthSuccess) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(state.message)));
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const HomePage()),
+                  );
+                }
+                if (state is AuthFailed) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(state.message)));
+                }
+              },
+              builder: (context, state) {
+                return CustomButton(
+                  text: state is AuthLoading ? 'Loading...' : 'Login',
+                  onTap: () {
+                    context.read<AuthBloc>().add(
+                      UserSignInEvent(
+                        userModel: UserModel(
+                          userName: _usernameController.text.trim(),
+                          password: _passwordController.text.trim(),
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
             ),
@@ -63,16 +92,12 @@ class LoginPage extends StatelessWidget {
             //create aacount
             TextButton(
               onPressed: () {
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) => BlocProvider(
-                //       create: (context) =>
-                //           AuthBloc(AuthRepositoryImpl(AuthSourceImpl())),
-                //       child: CreateAccountPage(),
-                //     ),
-                //   ),
-                // );
-                 AuthConnect(authTo: false);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const AuthConnect(authTo: false),
+                  ),
+                );
               },
               child: CustomTextWidget(text: 'Create Account', fontSize: 17),
             ),

@@ -38,13 +38,17 @@ class AuthSourceImpl extends AuthSource {
       );
 
       if (res.user == null) {
+        print('Failed');
+
         return const Left("User login failed");
       }
-
+      print('Success');
       return Right("User login success");
     } on FirebaseAuthException catch (e) {
+      print(e.toString());
       return Left(e.message ?? "Authentication error");
     } catch (e) {
+      print(e.toString());
       return Left(e.toString());
     }
   }

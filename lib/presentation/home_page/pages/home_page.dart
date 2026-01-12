@@ -77,21 +77,21 @@ class HomePage extends StatelessWidget {
 }
 
 /// Dummy Data
-final List<Product> productList = [
-  Product(
-    name: "Men's Cotton Jacket",
+final List<ProductModel> productList = [
+  ProductModel(
+    title: "Men's Cotton Jacket",
     image: "https://images.unsplash.com/photo-1618354691438-25bc04584c23",
-    price: "5,800",
+    price: 5800,
   ),
 
-  Product(
-    name: "Fjällräven - Foldsack No 1 Backpack",
+  ProductModel(
+    title: "Fjällräven - Foldsack No 1 Backpack",
     image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f",
-    price: "3,200",
+    price: 3200,
   ),
-  Product(
-    name: "Casual Premium Slim Fit T-Shirt",
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
-    price: "1,600",
-  ),
+  // Product(
+  //   name: "Casual Premium Slim Fit T-Shirt",
+  //   image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
+  //   price: "1,600",
+  // ),
 ];

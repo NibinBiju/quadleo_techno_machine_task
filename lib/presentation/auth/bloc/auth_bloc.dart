@@ -7,6 +7,12 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  @override
+  void onChange(Change<AuthState> change) {
+    print("New State:$change");
+    super.onChange(change);
+  }
+
   final AuthRepository authRepository;
   AuthBloc(this.authRepository) : super(AuthInitial()) {
     //user signin
@@ -17,6 +23,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void userSignInBloc() {
     return on<UserSignInEvent>((event, emit) async {
+      emit(AuthLoading());
       var returnedData = await authRepository.userSign(
         userModel: event.userModel,
       );
@@ -34,10 +41,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void userCreateBloc() {
     return on<UserCreateEvent>((event, emit) async {
+      emit(AuthLoading());
       var returnedData = await authRepository.createUser(
         userModel: event.userModel,
       );
-
       returnedData.fold(
         (error) {
           emit(AuthFailed(message: error));

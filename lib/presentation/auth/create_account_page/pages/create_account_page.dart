@@ -7,10 +7,16 @@ import 'package:quadleo_techno_machine_task/data/model/user_model.dart';
 import 'package:quadleo_techno_machine_task/presentation/auth/auth_connect.dart';
 import 'package:quadleo_techno_machine_task/presentation/auth/bloc/auth_bloc.dart';
 
-class CreateAccountPage extends StatelessWidget {
-  CreateAccountPage({super.key});
+class CreateAccountPage extends StatefulWidget {
+  const CreateAccountPage({super.key});
 
+  @override
+  State<CreateAccountPage> createState() => _CreateAccountPageState();
+}
+
+class _CreateAccountPageState extends State<CreateAccountPage> {
   final TextEditingController _usernameController = TextEditingController();
+
   final TextEditingController _passwordController = TextEditingController();
 
   @override
@@ -60,7 +66,7 @@ class CreateAccountPage extends StatelessWidget {
               },
               builder: (context, state) {
                 return CustomButton(
-                  text: 'Create',
+                  text: state is AuthLoading ? 'Loading...' : 'Create',
                   onTap: () {
                     context.read<AuthBloc>().add(
                       UserCreateEvent(
@@ -79,7 +85,12 @@ class CreateAccountPage extends StatelessWidget {
             //create aacount
             TextButton(
               onPressed: () {
-                AuthConnect(authTo: true);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const AuthConnect(authTo: true),
+                  ),
+                );
               },
               child: CustomTextWidget(text: 'User Login', fontSize: 17),
             ),
