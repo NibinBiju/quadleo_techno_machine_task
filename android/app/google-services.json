@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "65466880440",
+    "project_id": "quadleo-techno-machine-task",
+    "storage_bucket": "quadleo-techno-machine-task.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65466880440:android:25a54ed56e50df2295ff4d",
+        "android_client_info": {
+          "package_name": "com.example.quadleo_techno_machine_task"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_cMT6Y2hbtxOSf3t2dk_ehyEt2vbXetQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

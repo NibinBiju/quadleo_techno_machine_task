@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:quadleo_techno_machine_task/core/widgets/app_textfield.dart';
+import 'package:quadleo_techno_machine_task/core/widgets/custom_button.dart';
 import 'package:quadleo_techno_machine_task/core/widgets/custom_text.dart';
+import 'package:quadleo_techno_machine_task/presentation/create_account_page.dart/pages/create_account_page.dart';
+import 'package:quadleo_techno_machine_task/presentation/home_page/pages/home_page.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -23,6 +26,7 @@ class LoginPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomTextWidget(text: 'Welcome back!', fontSize: 22),
+            SizedBox(height: 40),
             AppTextField(
               controller: _usernameController,
               hintText: 'Username',
@@ -37,18 +41,29 @@ class LoginPage extends StatelessWidget {
               preffixIcon: Image.asset('assets/png/password.png'),
               keyboardType: TextInputType.visiblePassword,
             ),
+            SizedBox(height: 40),
             //login button
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(17),
-              decoration: BoxDecoration(
-                color: Color(0xFF4943D3),
-                borderRadius: BorderRadius.circular(23),
-              ),
-              child: Center(child: CustomTextWidget(text: 'Login')),
+            CustomButton(
+              text: 'Login',
+              onTap: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                );
+              },
             ),
-            //create aacount
+            SizedBox(height: 10),
             //forget password
+            CustomTextWidget(text: 'Forget Password?', fontSize: 17),
+            SizedBox(height: 10),
+            //create aacount
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => CreateAccountPage()),
+                );
+              },
+              child: CustomTextWidget(text: 'Create Account', fontSize: 17),
+            ),
           ],
         ),
       ),

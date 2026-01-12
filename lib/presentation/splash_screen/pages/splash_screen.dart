@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quadleo_techno_machine_task/presentation/login_page/login_page.dart';
+import 'package:quadleo_techno_machine_task/presentation/login_page/pages/login_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
