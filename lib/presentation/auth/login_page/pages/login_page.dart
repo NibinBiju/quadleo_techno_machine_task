@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quadleo_techno_machine_task/core/helper/dio_helper.dart';
 import 'package:quadleo_techno_machine_task/core/widgets/app_textfield.dart';
 import 'package:quadleo_techno_machine_task/core/widgets/custom_button.dart';
 import 'package:quadleo_techno_machine_task/core/widgets/custom_text.dart';
 import 'package:quadleo_techno_machine_task/data/model/user_model.dart';
+import 'package:quadleo_techno_machine_task/data/repository_impl/product_repository_impl.dart';
+import 'package:quadleo_techno_machine_task/data/source/product_source.dart';
 import 'package:quadleo_techno_machine_task/presentation/auth/auth_connect.dart';
 import 'package:quadleo_techno_machine_task/presentation/auth/bloc/auth_bloc.dart';
+import 'package:quadleo_techno_machine_task/presentation/home_page/cubit/product_cubit.dart';
 import 'package:quadleo_techno_machine_task/presentation/home_page/pages/home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -60,7 +64,15 @@ class _LoginPageState extends State<LoginPage> {
                   ).showSnackBar(SnackBar(content: Text(state.message)));
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (_) => const HomePage()),
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider(
+                        create: (context) => ProductCubit(
+                          ProductRepositoryImpl(ProductSourceImpl(DioHelper()))
+                            ..getProducts(),
+                        ),
+                        child: const HomePage(),
+                      ),
+                    ),
                   );
                 }
                 if (state is AuthFailed) {

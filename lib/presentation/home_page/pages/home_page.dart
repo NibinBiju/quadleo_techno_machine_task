@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quadleo_techno_machine_task/core/widgets/custom_text.dart';
 import 'package:quadleo_techno_machine_task/core/widgets/product_card.dart';
 import 'package:quadleo_techno_machine_task/data/model/product.dart';
+import 'package:quadleo_techno_machine_task/presentation/home_page/cubit/product_cubit.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    context.read<ProductCubit>().getProducts();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +34,7 @@ class HomePage extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            /// Search + Filter
+            //search bar
             Row(
               children: [
                 Expanded(
@@ -52,22 +65,36 @@ class HomePage extends StatelessWidget {
             ),
 
             const SizedBox(height: 16),
-
-            /// Product Grid
-            Expanded(
-              child: GridView.builder(
-                itemCount: productList.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 16,
-                  childAspectRatio: 0.68,
-                ),
-                itemBuilder: (context, index) {
-                  final product = productList[index];
-                  return ProductCard(product: product);
-                },
-              ),
+            //product list
+            BlocBuilder<ProductCubit, ProductState>(
+              builder: (context, state) {
+                if (state is ProductLoading) {
+                  return CircularProgressIndicator();
+                }
+                if (state is ProductFailed) {
+                  return Center(child: Text(state.message));
+                }
+                if (state is ProductSuccess) {
+                  List<ProductModel> productList = state.productsList;
+                  return Expanded(
+                    child: GridView.builder(
+                      itemCount: productList.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 16,
+                            crossAxisSpacing: 16,
+                            childAspectRatio: 0.68,
+                          ),
+                      itemBuilder: (context, index) {
+                        final product = productList[index];
+                        return ProductCard(product: product);
+                      },
+                    ),
+                  );
+                }
+                return CircularProgressIndicator();
+              },
             ),
           ],
         ),
@@ -75,23 +102,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
-/// Dummy Data
-final List<ProductModel> productList = [
-  ProductModel(
-    title: "Men's Cotton Jacket",
-    image: "https://images.unsplash.com/photo-1618354691438-25bc04584c23",
-    price: 5800,
-  ),
-
-  ProductModel(
-    title: "Fjällräven - Foldsack No 1 Backpack",
-    image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f",
-    price: 3200,
-  ),
-  // Product(
-  //   name: "Casual Premium Slim Fit T-Shirt",
-  //   image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab",
-  //   price: "1,600",
-  // ),
-];

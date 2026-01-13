@@ -11,6 +11,7 @@ class CustomTextWidget extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
+        fontFamily: 'Montserrat',
         fontWeight: FontWeight.w800,
         color: Colors.black,
         fontSize: fontSize,
